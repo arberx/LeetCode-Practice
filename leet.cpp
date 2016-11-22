@@ -3,6 +3,7 @@
 #include<deque>
 #include<stack>
 #include <vector>
+#include<algorithm>
 #include <string>
 #include<unordered_map>
 
@@ -122,10 +123,51 @@ public:
 };
 
 /*TODO*/
-class Solution {
+class Sum3 {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
+	vector<vector<int>> threeSum(vector<int>& nums) {
+		//solutions vector
+		vector<vector<int>> sol;
 
+		//temp vector
+		vector< int> temp(3);
+
+		//index into solutions vector
+		int num_solu = 0;
+
+		//unordered map that contains [value, index] 
+		unordered_map<int, int> s;
+
+		/*create hashtable*/
+		for (int in = 0; in < nums.size(); ++in) {
+			s[nums[in]] = in;
+		}
+
+		//nested for loop
+		for (int first = 0; first < nums.size(); ++first) {
+			temp[0] = nums[first];
+			for (int second = first + 1; second < nums.size(); ++second) {
+				temp[1] = nums[second];
+				int val = ((nums[first])+ nums[second])*(-1);
+
+				auto got = s.find(val);
+
+				if ((got != s.end()) && (got->second != first) && (got->second != second)) {
+					temp[2] = got->first;
+					sol.resize(sol.size() + 1);
+					vector<int> temp1 = temp;
+					sort(temp1.begin(),temp1.end());
+					sol[num_solu] = temp1;
+					++num_solu;
+				}
+			}
+		}
+
+		/*make unique*/
+		auto end = unique(sol.begin(), sol.end());
+		sol.resize(distance(sol.begin(), end)-1);
+
+		return sol;
 	}
 };
 
@@ -166,8 +208,6 @@ public:
 
 
 
-
-
 int main() {
 	///*
 	//vector<int> i = { 3,2,4 };
@@ -195,6 +235,11 @@ int main() {
 
 	//sum s;
 	//s.reverse(10);
+
+	/*3sum*/
+	vector<int> S = { -1,0,1,2,-1,-4 };
+	Sum3 sum;
+	sum.threeSum(S);
 
 
 
